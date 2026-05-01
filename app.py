@@ -109,43 +109,39 @@ with tab1:
     rating_order = ['Critically Insufficient', 'Highly Insufficient', 'Insufficient', 'Almost Sufficient']
     df_map['cat_rating'] = pd.Categorical(df_map['cat_rating'], categories=rating_order, ordered=True)
 
-    col1, col2 = st.columns(2)
+    st.markdown("##### Actual CAT Ratings (from Climate Action Tracker)")
+    fig_actual = px.choropleth(
+        df_map.dropna(subset=['iso_code', 'cat_rating']),
+        locations='iso_code',
+        color='cat_rating',
+        hover_name='country',
+        color_discrete_map=RATING_COLORS,
+        category_orders={'cat_rating': rating_order},
+        title='Official CAT Ratings (39 countries)'
+    )
+    fig_actual.update_layout(
+        height=400, margin=dict(l=0, r=0, t=40, b=0),
+        legend_title='CAT Rating'
+    )
+    st.plotly_chart(fig_actual, use_container_width=True)
 
-    with col1:
-        st.markdown("##### Actual CAT Ratings (from Climate Action Tracker)")
-        fig_actual = px.choropleth(
-            df_map.dropna(subset=['iso_code', 'cat_rating']),
-            locations='iso_code',
-            color='cat_rating',
-            hover_name='country',
-            color_discrete_map=RATING_COLORS,
-            category_orders={'cat_rating': rating_order},
-            title='Official CAT Ratings (39 countries)'
-        )
-        fig_actual.update_layout(
-            height=380, margin=dict(l=0, r=0, t=40, b=0),
-            legend_title='CAT Rating'
-        )
-        st.plotly_chart(fig_actual, use_container_width=True)
-
-    with col2:
-        st.markdown("##### ML-Predicted On-Track Status")
-        fig_pred = px.choropleth(
-            df_map.dropna(subset=['iso_code']),
-            locations='iso_code',
-            color='predicted_label',
-            hover_name='country',
-            color_discrete_map={
-                'Almost Sufficient (On Track)': '#06d6a0',
-                'Not on Track': '#e63946'
-            },
-            title='Predicted Paris Agreement Alignment'
-        )
-        fig_pred.update_layout(
-            height=380, margin=dict(l=0, r=0, t=40, b=0),
-            legend_title='Prediction'
-        )
-        st.plotly_chart(fig_pred, use_container_width=True)
+    st.markdown("##### ML-Predicted On-Track Status")
+    fig_pred = px.choropleth(
+        df_map.dropna(subset=['iso_code']),
+        locations='iso_code',
+        color='predicted_label',
+        hover_name='country',
+        color_discrete_map={
+            'Almost Sufficient (On Track)': '#06d6a0',
+            'Not on Track': '#e63946'
+        },
+        title='Predicted Paris Agreement Alignment'
+    )
+    fig_pred.update_layout(
+        height=400, margin=dict(l=0, r=0, t=40, b=0),
+        legend_title='Prediction'
+    )
+    st.plotly_chart(fig_pred, use_container_width=True)
 
     # Rating breakdown table — rename cat_rating column
     st.markdown("##### Rating Breakdown")
@@ -188,7 +184,7 @@ with tab2:
     feat_df['On-Track Avg']  = [on_track_avg[f]  for f in feat_df['Feature']]
     feat_df['Not-Track Avg'] = [not_track_avg[f] for f in feat_df['Feature']]
 
-    fig_feat, ax = plt.subplots(figsize=(11, 5))
+    fig_feat, ax = plt.subplots(figsize=(8, 6))
     x = np.arange(len(feat_df))
     w = 0.28
     ax.bar(x - w, feat_df['Value'],        w, label=selected,       color='#264653', zorder=3)
@@ -201,7 +197,7 @@ with tab2:
     ax.set_title(f"Feature Profile: {selected} vs. Group Averages")
     ax.grid(axis='y', alpha=0.3)
     plt.tight_layout()
-    st.pyplot(fig_feat)
+    st.pyplot(fig_feat, use_container_width=True)
 
     # SHAP waterfall with human-readable feature names
     st.subheader("SHAP Explanation — Why this prediction?")
@@ -224,11 +220,11 @@ with tab2:
         data=shap_exp_all.data[idx],
         feature_names=readable_names
     )
-    fig_wf, ax_wf = plt.subplots(figsize=(10, 5))
+    fig_wf, ax_wf = plt.subplots(figsize=(8, 6))
     shap.plots.waterfall(sample_exp, show=False)
     plt.title(f"SHAP Waterfall: {selected}")
     plt.tight_layout()
-    st.pyplot(fig_wf)
+    st.pyplot(fig_wf, use_container_width=True)
 
     st.caption(
         "SHAP values show how each feature pushes the prediction toward 'On Track' (positive) "
@@ -262,7 +258,7 @@ with tab3:
     else:
         sv2 = shap_exp2.values
 
-    fig_shap, ax_shap = plt.subplots(figsize=(10, 5))
+    fig_shap, ax_shap = plt.subplots(figsize=(8, 6))
     shap.summary_plot(
         sv2,
         df[FEATURES].fillna(df[FEATURES].median()).values,
@@ -272,20 +268,18 @@ with tab3:
     )
     ax_shap.set_title("Mean |SHAP Value| — Global Feature Importance", fontsize=13)
     plt.tight_layout()
-    st.pyplot(fig_shap)
+    st.pyplot(fig_shap, use_container_width=True)
 
     st.markdown("---")
     st.subheader("Custom Prediction")
     st.markdown("Adjust the sliders to simulate a hypothetical country's emission profile:")
 
     input_vals = {}
-    cols = st.columns(2)
-    for i, feat in enumerate(FEATURES):
-        col = cols[i % 2]
+    for feat in FEATURES:
         fmin = float(df[feat].min())
         fmax = float(df[feat].max())
         fmed = float(df[feat].median())
-        input_vals[feat] = col.slider(
+        input_vals[feat] = st.slider(
             label(feat),
             min_value=fmin,
             max_value=fmax,
