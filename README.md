@@ -129,7 +129,9 @@ jupyter notebook notebooks/GHG_Paris_Prediction.ipynb
 
 ## References
 
-- Rogelj et al. (2016). Paris Agreement climate proposals need a boost to keep warming well below 2°C. *Nature Climate Change*.
-- Climate Action Tracker (2024). [climateactiontracker.org](https://climateactiontracker.org)
+- UNEP (2025). Emissions Gap Report 2025: Off Target. United Nations Environment Programme. [unep.org](https://www.unep.org/resources/emissions-gap-report-2025)
+- Begum, A.M. & Al Mobin, M. (2025). A machine learning approach to carbon emissions prediction of the top eleven emitters by 2030 and their prospects for meeting Paris agreement targets. *Scientific Reports*. DOI: 10.1038/s41598-025-04236-5
+- Costantini, L. et al. (2024). Forecasting national CO2 emissions worldwide. *Scientific Reports*. DOI: 10.1038/s41598-024-73060-0
+- Climate Action Tracker (2025). [climateactiontracker.org](https://climateactiontracker.org)
 - UNFCCC NDC Registry. [unfccc.int/NDCREG](https://unfccc.int/NDCREG)
 - Our World in Data — CO₂ and Greenhouse Gas Emissions. [ourworldindata.org](https://ourworldindata.org/co2-and-greenhouse-gas-emissions)
