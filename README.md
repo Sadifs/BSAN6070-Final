@@ -63,9 +63,9 @@ Three models trained (one per team member), evaluated with **Stratified 5-Fold C
 
 | Model | ROC-AUC | Accuracy | Role |
 |-------|---------|----------|------|
-| Logistic Regression | — | — | Member 1 · Interpretable baseline |
+| Logistic Regression | 0.900 | 77.1% | Member 1 · Interpretable baseline |
 | **Random Forest ★** | **0.933** | **84.6%** | Member 2 · **Selected for deployment** |
-| Gradient Boosting | — | — | Member 3 · Strong but higher overfitting risk at n=39 |
+| Gradient Boosting | 0.885 | 79.3% | Member 3 · Strong but higher overfitting risk at n=39 |
 
 **Final model:** Random Forest with GridSearchCV hyperparameter tuning (`n_estimators`, `max_depth`, `min_samples_split`, `class_weight`).
 
